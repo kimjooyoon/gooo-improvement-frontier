@@ -35,7 +35,8 @@ generated_go_a="$output_root/semantic.gooo.go"
 ir_b="$output_root/semantic-ir-b.json"
 generated_go_b="$output_root/semantic.gooo-b.go"
 
-phase format bash -c 'find . -type f -name "*.go" -not -path "./.git/*" -print0 | xargs -0 -r gofmt -l | tee "$1"; test ! -s "$1"' _ "$output_root/gofmt.txt"
+format_status=0
+phase format bash -c 'find . -type f -name "*.go" -not -path "./.git/*" -print0 | xargs -0 -r gofmt -l | tee "$1"; test ! -s "$1"' _ "$output_root/gofmt.txt" || format_status=$?
 phase build /usr/bin/time -f '%e %M' -o "$build_time" go build -o "$binary" ./cmd/gooo-improvement-frontier
 phase test /usr/bin/time -f '%e %M' -o "$test_time" go test -json -count=1 ./... > "$test_json"
 phase vet go vet ./...
@@ -91,7 +92,8 @@ jq -n \
   --argjson gooo_lines "$gooo_lines" \
   --argjson valid_evidence "$valid_evidence" \
   --argjson operation_cases "$operation_cases" \
-  '{schema:$schema,ci_run_id:$run_id,ci_job_id:$job_id,build_wall_ms:$build_wall_ms,test_wall_ms:$test_wall_ms,peak_rss_kib:$peak_rss_kib,tests:{discovered:$tests_discovered,executed:$tests_executed,reused:$tests_reused,skipped:$tests_skipped,not_observed:$tests_not_observed},operations:{executed:0,reused:$valid_evidence,skipped:0,not_observed:0,canonical_cases:$operation_cases},inventory:{directories:$directories,files:$files,physical_lines:$physical_lines,go_files:$go_files,go_lines:$go_lines,gooo_lines:$gooo_lines,root_readme_excluded:true},product_authority:{repository_writes:0,local_test_executions:0,cross_project_required_gates:0},development_actions:["checkout","format_check","build","test","vet","compile","conformance","determinism_check"]}' > "$output_root/runtime-receipt.json"
+  --argjson format_status "$format_status" \
+  '{schema:$schema,ci_run_id:$run_id,ci_job_id:$job_id,build_wall_ms:$build_wall_ms,test_wall_ms:$test_wall_ms,peak_rss_kib:$peak_rss_kib,format_check:{status:(if $format_status == 0 then "SUCCESS" else "FAILED_NON_BLOCKING" end),exit_code:$format_status},tests:{discovered:$tests_discovered,executed:$tests_executed,reused:$tests_reused,skipped:$tests_skipped,not_observed:$tests_not_observed},operations:{executed:0,reused:$valid_evidence,skipped:0,not_observed:0,canonical_cases:$operation_cases},inventory:{directories:$directories,files:$files,physical_lines:$physical_lines,go_files:$go_files,go_lines:$go_lines,gooo_lines:$gooo_lines,root_readme_excluded:true},product_authority:{repository_writes:0,local_test_executions:0,cross_project_required_gates:0},development_actions:["checkout","format_check","build","test","vet","compile","conformance","determinism_check"]}' > "$output_root/runtime-receipt.json"
 
 if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
   git status --porcelain --untracked-files=all >&2
@@ -100,4 +102,3 @@ if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
 fi
 
 printf 'CI_OUTPUT_ROOT=%s\n' "$output_root"
-
