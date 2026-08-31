@@ -36,7 +36,16 @@ ir_b="$output_root/semantic-ir-b.json"
 generated_go_b="$output_root/semantic.gooo-b.go"
 
 format_status=0
-phase format bash -c 'find . -type f -name "*.go" -not -path "./.git/*" -print0 | xargs -0 -r gofmt -l | tee "$1"; test ! -s "$1"' _ "$output_root/gofmt.txt" || format_status=$?
+format_log="$output_root/gofmt.diff"
+set +e
+find . -type f -name '*.go' -not -path './.git/*' -print0 | xargs -0 -r gofmt -d > "$format_log" 2>&1
+format_tool_status=$?
+set -e
+if [ "$format_tool_status" -ne 0 ] || [ -s "$format_log" ]; then
+  format_status=1
+fi
+jq -cn --arg phase format --arg status "$([ "$format_status" -eq 0 ] && echo SUCCESS || echo FAILED_NON_BLOCKING)" --arg log "$format_log" --argjson exit_code "$format_status" '{phase:$phase,status:$status,exit_code:$exit_code,log:$log}' >> "$attempts"
+cat "$format_log"
 phase build /usr/bin/time -f '%e %M' -o "$build_time" go build -o "$binary" ./cmd/gooo-improvement-frontier
 phase test /usr/bin/time -f '%e %M' -o "$test_time" go test -json -count=1 ./... > "$test_json"
 phase vet go vet ./...
