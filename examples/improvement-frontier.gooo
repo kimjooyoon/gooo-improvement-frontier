@@ -1,0 +1,15 @@
+@gooo schema="gooo/improvement-frontier/v1"
+
+activity claim_id="claim_capability_alpha" operation_id="capability_alpha" stage="capability" step="alpha_repository" proof_choice="FOUNDATION"
+activity claim_id="claim_capability_beta" operation_id="capability_beta" stage="capability" step="beta_repository" proof_choice="FOUNDATION"
+activity claim_id="claim_capability_gamma" operation_id="capability_gamma" stage="capability" step="gamma_repository" proof_choice="FOUNDATION"
+activity claim_id="claim_core_dev_receipt" operation_id="core_dev_receipt" stage="core" step="dev_receipt" proof_choice="FOUNDATION"
+activity claim_id="claim_core_main_promotion" operation_id="core_main_promotion" stage="core" step="dev_to_main_promotion" proof_choice="COHERENCE"
+activity claim_id="claim_guardian_credential" operation_id="guardian_credential" stage="guardian" step="app_credential" proof_choice="COHERENCE"
+activity claim_id="claim_guardian_evaluation" operation_id="guardian_evaluation" stage="guardian" step="guarded_evaluation" proof_choice="COHERENCE"
+activity claim_id="claim_rest_changed_file_receipt" operation_id="rest_changed_file_receipt" stage="evidence" step="rest_changed_file_receipt" proof_choice="REGRESSION"
+activity claim_id="claim_rest_promotion" operation_id="rest_promotion" stage="evidence" step="rest_promotion" proof_choice="REGRESSION"
+activity claim_id="claim_denominator_migration" operation_id="denominator_migration" stage="denominator" step="explicit_migration" proof_choice="FOUNDATION"
+activity claim_id="claim_denominator_receipt" operation_id="denominator_receipt" stage="denominator" step="migration_receipt" proof_choice="COHERENCE"
+activity claim_id="claim_optional_release_digest" operation_id="optional_release_digest" stage="release" step="immutable_release_digest" proof_choice="REGRESSION"
+

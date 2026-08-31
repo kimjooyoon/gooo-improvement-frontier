@@ -1,0 +1,32 @@
+{
+  "schema": "gooo/improvement-frontier/protocol/v1/fixture/v1",
+  "case_id": "normal-independent",
+  "description": "Independent capability operations and explicitly serialized core and denominator transitions.",
+  "graph": {
+    "schema": "gooo/improvement-frontier/protocol/v1/graph/v1",
+    "graph_id": "normal-independent-v1",
+    "denominator_id": "improvement-frontier-v1",
+    "meta_activity_count": 12,
+    "nodes": [
+      {"claim_id": "claim_capability_alpha", "operation_id": "capability_alpha", "current": "CLOSED", "stage": "capability", "step": "alpha_repository", "proof_choice": "FOUNDATION", "depends_on": [], "blocked_by": [], "mutation_authority": ["repository:capability-alpha"], "resource_locks": ["artifact:capability-alpha-plan"], "immutable_inputs": {"alpha@v1": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "next_operation": "none"},
+      {"claim_id": "claim_capability_beta", "operation_id": "capability_beta", "current": "CLOSED", "stage": "capability", "step": "beta_repository", "proof_choice": "FOUNDATION", "depends_on": [], "blocked_by": [], "mutation_authority": ["repository:capability-beta"], "resource_locks": ["artifact:capability-beta-plan"], "immutable_inputs": {"beta@v1": "sha256:2222222222222222222222222222222222222222222222222222222222222222"}, "next_operation": "none"},
+      {"claim_id": "claim_capability_gamma", "operation_id": "capability_gamma", "current": "CLOSED", "stage": "capability", "step": "gamma_repository", "proof_choice": "FOUNDATION", "depends_on": [], "blocked_by": [], "mutation_authority": ["repository:capability-gamma"], "resource_locks": ["artifact:capability-gamma-plan"], "immutable_inputs": {"gamma@v1": "sha256:3333333333333333333333333333333333333333333333333333333333333333"}, "next_operation": "none"},
+      {"claim_id": "claim_core_dev_receipt", "operation_id": "core_dev_receipt", "current": "CLOSED", "stage": "core", "step": "dev_receipt", "proof_choice": "FOUNDATION", "depends_on": [], "blocked_by": [], "mutation_authority": ["branch:protected:core-main"], "resource_locks": ["receipt:core-promotion"], "immutable_inputs": {"core-dev@v1": "sha256:4444444444444444444444444444444444444444444444444444444444444444"}, "next_operation": "core_main_promotion"},
+      {"claim_id": "claim_core_main_promotion", "operation_id": "core_main_promotion", "current": "CLOSED", "stage": "core", "step": "dev_to_main_promotion", "proof_choice": "COHERENCE", "depends_on": ["core_dev_receipt"], "blocked_by": [], "mutation_authority": ["branch:protected:core-main"], "resource_locks": ["branch:protected:core-main", "receipt:core-promotion"], "immutable_inputs": {"core-main@v1": "sha256:5555555555555555555555555555555555555555555555555555555555555555"}, "next_operation": "none"},
+      {"claim_id": "claim_denominator_migration", "operation_id": "denominator_migration", "current": "CLOSED", "stage": "denominator", "step": "explicit_migration", "proof_choice": "FOUNDATION", "depends_on": [], "blocked_by": [], "mutation_authority": ["denominator:improvement-frontier-v1"], "resource_locks": ["denominator:improvement-frontier-v1"], "immutable_inputs": {"denominator@v1": "sha256:6666666666666666666666666666666666666666666666666666666666666666"}, "next_operation": "denominator_receipt"},
+      {"claim_id": "claim_denominator_receipt", "operation_id": "denominator_receipt", "current": "CLOSED", "stage": "denominator", "step": "migration_receipt", "proof_choice": "COHERENCE", "depends_on": ["denominator_migration"], "blocked_by": [], "mutation_authority": ["artifact:denominator-receipt"], "resource_locks": ["denominator:improvement-frontier-v1", "receipt:denominator"], "immutable_inputs": {"denominator-receipt@v1": "sha256:7777777777777777777777777777777777777777777777777777777777777777"}, "next_operation": "none"}
+    ],
+    "evidence": [],
+    "denominator_migrations": []
+  },
+  "expected": {
+    "state": "CLOSED",
+    "parallel_batches": [["capability_alpha", "capability_beta", "capability_gamma", "core_dev_receipt", "denominator_migration"], ["core_main_promotion", "denominator_receipt"]],
+    "blocked_frontier_roots": [],
+    "refuted_frontier_roots": [],
+    "serial_cut_relations": ["DEPENDENCY_CLOSURE_INTERSECTION", "MUTATION_AUTHORITY_INTERSECTION", "RESOURCE_LOCK_INTERSECTION"],
+    "valid_evidence_ids": [],
+    "invalid_evidence_ids": []
+  }
+}
+

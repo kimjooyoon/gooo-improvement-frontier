@@ -1,0 +1,20 @@
+{
+  "schema": "gooo/improvement-frontier/protocol/v1/fixture/v1",
+  "case_id": "refuted-rest-truncation",
+  "description": "A known REST changed-file truncation contradiction is never schedulable.",
+  "graph": {
+    "schema": "gooo/improvement-frontier/protocol/v1/graph/v1",
+    "graph_id": "refuted-rest-truncation-v1",
+    "denominator_id": "improvement-frontier-v1",
+    "meta_activity_count": 12,
+    "nodes": [
+      {"claim_id": "claim_capability_alpha", "operation_id": "capability_alpha", "current": "CLOSED", "stage": "capability", "step": "alpha_repository", "proof_choice": "FOUNDATION", "depends_on": [], "blocked_by": [], "mutation_authority": ["repository:capability-alpha"], "resource_locks": ["artifact:capability-alpha-plan"], "immutable_inputs": {"alpha@v1": "sha256:1111111111111111111111111111111111111111111111111111111111111111"}, "next_operation": "none"},
+      {"claim_id": "claim_rest_changed_file_receipt", "operation_id": "rest_changed_file_receipt", "current": "REFUTED", "stage": "evidence", "step": "rest_changed_file_receipt", "proof_choice": "REGRESSION", "depends_on": [], "blocked_by": [], "mutation_authority": ["artifact:rest-changed-files"], "resource_locks": ["receipt:rest-changed-files"], "immutable_inputs": {"rest@v1": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}, "next_operation": "repair-rest-changed-file-receipt", "reason": "REST changed-file response is truncated; required files are absent.", "unknown_class": "KNOWN_CONTRADICTION"},
+      {"claim_id": "claim_rest_promotion", "operation_id": "rest_promotion", "current": "CLOSED", "stage": "evidence", "step": "rest_promotion", "proof_choice": "REGRESSION", "depends_on": ["rest_changed_file_receipt"], "blocked_by": [], "mutation_authority": ["branch:rest-promotion"], "resource_locks": ["receipt:rest-promotion"], "immutable_inputs": {"rest-promotion@v1": "sha256:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}, "next_operation": "none"}
+    ],
+    "evidence": [],
+    "denominator_migrations": []
+  },
+  "expected": {"state": "REFUTED", "parallel_batches": [["capability_alpha"]], "blocked_frontier_roots": [], "refuted_frontier_roots": ["rest_changed_file_receipt"], "serial_cut_relations": [], "valid_evidence_ids": [], "invalid_evidence_ids": []}
+}
+

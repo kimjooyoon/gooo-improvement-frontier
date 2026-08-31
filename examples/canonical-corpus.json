@@ -1,0 +1,15 @@
+{
+  "schema": "gooo/improvement-frontier/corpus/v1",
+  "corpus_id": "canonical-improvement-frontier-v1",
+  "denominator_id": "improvement-frontier-v1",
+  "fixed_denominator": 12,
+  "cases": [
+    {"ordinal": 1, "case_id": "normal-independent", "path": "fixtures/cases/normal-independent.json", "state": "CLOSED"},
+    {"ordinal": 2, "case_id": "real-shaped-frontier", "path": "fixtures/real-shaped/frontier.json", "state": "REFUTED"},
+    {"ordinal": 3, "case_id": "unknown-guardian-credential", "path": "fixtures/cases/unknown-guardian-credential.json", "state": "UNKNOWN"},
+    {"ordinal": 4, "case_id": "refuted-rest-truncation", "path": "fixtures/cases/refuted-rest-truncation.json", "state": "REFUTED"},
+    {"ordinal": 5, "case_id": "unknown-cycle-without-choice", "path": "fixtures/cases/unknown-cycle-without-choice.json", "state": "UNKNOWN"},
+    {"ordinal": 6, "case_id": "unknown-cache-identity", "path": "fixtures/cases/unknown-cache-identity.json", "state": "UNKNOWN"}
+  ]
+}
+

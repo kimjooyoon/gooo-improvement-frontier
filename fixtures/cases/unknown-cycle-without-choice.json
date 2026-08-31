@@ -1,0 +1,19 @@
+{
+  "schema": "gooo/improvement-frontier/protocol/v1/fixture/v1",
+  "case_id": "unknown-cycle-without-choice",
+  "description": "A cycle with mismatched proof choices is preserved as UNKNOWN rather than silently ordered.",
+  "graph": {
+    "schema": "gooo/improvement-frontier/protocol/v1/graph/v1",
+    "graph_id": "unknown-cycle-without-choice-v1",
+    "denominator_id": "improvement-frontier-v1",
+    "meta_activity_count": 12,
+    "nodes": [
+      {"claim_id": "claim_cycle_a", "operation_id": "cycle_a", "current": "CLOSED", "stage": "cycle", "step": "a", "proof_choice": "FOUNDATION", "depends_on": ["cycle_b"], "blocked_by": [], "mutation_authority": ["artifact:cycle-a"], "resource_locks": ["lock:cycle"], "immutable_inputs": {"cycle-a@v1": "sha256:cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"}, "next_operation": "choose-cycle-proof"},
+      {"claim_id": "claim_cycle_b", "operation_id": "cycle_b", "current": "CLOSED", "stage": "cycle", "step": "b", "proof_choice": "COHERENCE", "depends_on": ["cycle_a"], "blocked_by": [], "mutation_authority": ["artifact:cycle-b"], "resource_locks": ["lock:cycle"], "immutable_inputs": {"cycle-b@v1": "sha256:dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"}, "next_operation": "choose-cycle-proof"}
+    ],
+    "evidence": [],
+    "denominator_migrations": []
+  },
+  "expected": {"state": "UNKNOWN", "parallel_batches": [], "blocked_frontier_roots": [], "refuted_frontier_roots": [], "serial_cut_relations": [], "valid_evidence_ids": [], "invalid_evidence_ids": []}
+}
+
