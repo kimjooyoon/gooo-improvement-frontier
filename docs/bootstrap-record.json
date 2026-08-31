@@ -1,0 +1,10 @@
+{
+  "schema": "gooo/improvement-frontier/bootstrap/v1",
+  "repository": "kimjooyoon/gooo-improvement-frontier",
+  "branch": "main",
+  "bootstrap_commit": "e6db82e1cda83ca1344efe48efb7de7a02501598",
+  "paths": [".gitignore", "LICENSE", "README.md"],
+  "root_readme_excluded_from_inventory": true,
+  "substantive_implementation_delivery": "one implementation pull request"
+}
+

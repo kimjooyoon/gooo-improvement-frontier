@@ -1,0 +1,20 @@
+{
+  "schema": "gooo/improvement-frontier/protocol/v1/fixture/v1",
+  "case_id": "unknown-cache-identity",
+  "description": "A cache hit with a different immutable identity is ignored and cannot close the operation.",
+  "graph": {
+    "schema": "gooo/improvement-frontier/protocol/v1/graph/v1",
+    "graph_id": "unknown-cache-identity-v1",
+    "denominator_id": "improvement-frontier-v1",
+    "meta_activity_count": 12,
+    "nodes": [
+      {"claim_id": "claim_cache_bound_operation", "operation_id": "cache_bound_operation", "current": "CLOSED", "stage": "evidence", "step": "cache_reuse", "proof_choice": "REGRESSION", "depends_on": [], "blocked_by": [], "mutation_authority": ["artifact:cache-bound"], "resource_locks": ["receipt:cache-bound"], "immutable_inputs": {"artifact@v1": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}, "evidence_ids": ["evidence_wrong_cache_identity"], "next_operation": "rebind-cache-identity"}
+    ],
+    "evidence": [
+      {"evidence_id": "evidence_wrong_cache_identity", "kind": "cache_hit", "node_operation_id": "cache_bound_operation", "observed_identity": "artifact@v0.9.0", "expected_identity": "artifact@v1", "observed_digest": "sha256:ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", "expected_digest": "sha256:eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"}
+    ],
+    "denominator_migrations": []
+  },
+  "expected": {"state": "UNKNOWN", "parallel_batches": [], "blocked_frontier_roots": ["cache_bound_operation"], "refuted_frontier_roots": [], "serial_cut_relations": [], "valid_evidence_ids": [], "invalid_evidence_ids": ["evidence_wrong_cache_identity"]}
+}
+
