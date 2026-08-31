@@ -24,31 +24,31 @@ type State string
 type ProofChoice string
 
 type Graph struct {
-	Schema                 string                `json:"schema"`
-	GraphID                string                `json:"graph_id"`
-	DenominatorID          string                `json:"denominator_id"`
-	MetaActivityCount      int                   `json:"meta_activity_count"`
-	Nodes                  []Node                `json:"nodes"`
-	Evidence               []Evidence            `json:"evidence"`
-	DenominatorMigrations  []DenominatorMigration `json:"denominator_migrations"`
+	Schema                string                 `json:"schema"`
+	GraphID               string                 `json:"graph_id"`
+	DenominatorID         string                 `json:"denominator_id"`
+	MetaActivityCount     int                    `json:"meta_activity_count"`
+	Nodes                 []Node                 `json:"nodes"`
+	Evidence              []Evidence             `json:"evidence"`
+	DenominatorMigrations []DenominatorMigration `json:"denominator_migrations"`
 }
 
 type Node struct {
-	ClaimID             string            `json:"claim_id"`
-	OperationID         string            `json:"operation_id"`
-	Current             State             `json:"current"`
-	Stage               string            `json:"stage"`
-	Step                string            `json:"step"`
-	ProofChoice         ProofChoice       `json:"proof_choice"`
-	DependsOn           []string          `json:"depends_on"`
-	BlockedBy           []string          `json:"blocked_by"`
-	MutationAuthority   []string          `json:"mutation_authority"`
-	ResourceLocks       []string          `json:"resource_locks"`
-	ImmutableInputs     map[string]string `json:"immutable_inputs"`
-	EvidenceIDs         []string          `json:"evidence_ids"`
-	NextOperation       string            `json:"next_operation"`
-	Reason              string            `json:"reason,omitempty"`
-	UnknownClass        string            `json:"unknown_class,omitempty"`
+	ClaimID           string            `json:"claim_id"`
+	OperationID       string            `json:"operation_id"`
+	Current           State             `json:"current"`
+	Stage             string            `json:"stage"`
+	Step              string            `json:"step"`
+	ProofChoice       ProofChoice       `json:"proof_choice"`
+	DependsOn         []string          `json:"depends_on"`
+	BlockedBy         []string          `json:"blocked_by"`
+	MutationAuthority []string          `json:"mutation_authority"`
+	ResourceLocks     []string          `json:"resource_locks"`
+	ImmutableInputs   map[string]string `json:"immutable_inputs"`
+	EvidenceIDs       []string          `json:"evidence_ids"`
+	NextOperation     string            `json:"next_operation"`
+	Reason            string            `json:"reason,omitempty"`
+	UnknownClass      string            `json:"unknown_class,omitempty"`
 }
 
 type Evidence struct {
@@ -77,16 +77,16 @@ type Contract struct {
 	FixedDenominator  int            `json:"fixed_denominator"`
 	MetaActivityCount int            `json:"meta_activity_count"`
 	Cells             []ContractCell `json:"cells"`
-	StatePrecedence   []State         `json:"state_precedence"`
+	StatePrecedence   []State        `json:"state_precedence"`
 	ForbiddenRanking  []string       `json:"forbidden_ranking"`
 }
 
 type ContractCell struct {
-	Ordinal    int    `json:"ordinal"`
-	ClaimID    string `json:"claim_id"`
+	Ordinal     int    `json:"ordinal"`
+	ClaimID     string `json:"claim_id"`
 	OperationID string `json:"operation_id"`
-	Stage      string `json:"stage"`
-	Step       string `json:"step"`
+	Stage       string `json:"stage"`
+	Step        string `json:"step"`
 	ProofChoice string `json:"proof_choice"`
 }
 
@@ -117,21 +117,21 @@ type Fixture struct {
 }
 
 type Expectations struct {
-	State                    State      `json:"state"`
-	ParallelBatches          [][]string `json:"parallel_batches"`
-	BlockedFrontierRoots     []string   `json:"blocked_frontier_roots"`
-	RefutedFrontierRoots     []string   `json:"refuted_frontier_roots"`
-	SerialCutRelations       []string   `json:"serial_cut_relations"`
-	ValidEvidenceIDs         []string   `json:"valid_evidence_ids"`
-	InvalidEvidenceIDs       []string   `json:"invalid_evidence_ids"`
+	State                State      `json:"state"`
+	ParallelBatches      [][]string `json:"parallel_batches"`
+	BlockedFrontierRoots []string   `json:"blocked_frontier_roots"`
+	RefutedFrontierRoots []string   `json:"refuted_frontier_roots"`
+	SerialCutRelations   []string   `json:"serial_cut_relations"`
+	ValidEvidenceIDs     []string   `json:"valid_evidence_ids"`
+	InvalidEvidenceIDs   []string   `json:"invalid_evidence_ids"`
 }
 
 type Corpus struct {
-	Schema           string        `json:"schema"`
-	CorpusID         string        `json:"corpus_id"`
-	DenominatorID    string        `json:"denominator_id"`
-	FixedDenominator int           `json:"fixed_denominator"`
-	Cases            []CorpusCase  `json:"cases"`
+	Schema           string       `json:"schema"`
+	CorpusID         string       `json:"corpus_id"`
+	DenominatorID    string       `json:"denominator_id"`
+	FixedDenominator int          `json:"fixed_denominator"`
+	Cases            []CorpusCase `json:"cases"`
 }
 
 type CorpusCase struct {
@@ -142,23 +142,23 @@ type CorpusCase struct {
 }
 
 type SerialCut struct {
-	Between    []string    `json:"between"`
-	Relation   string      `json:"relation"`
-	Shared     []string    `json:"shared"`
+	Between     []string    `json:"between"`
+	Relation    string      `json:"relation"`
+	Shared      []string    `json:"shared"`
 	ProofChoice ProofChoice `json:"proof_choice,omitempty"`
-	Reason     string      `json:"reason"`
+	Reason      string      `json:"reason"`
 }
 
 type Frontier struct {
-	OperationID       string   `json:"operation_id"`
-	ClaimID           string   `json:"claim_id"`
-	State             State    `json:"state"`
-	Stage             string   `json:"stage"`
-	Step              string   `json:"step"`
-	Reason            string   `json:"reason"`
-	UnknownClass      string   `json:"unknown_class,omitempty"`
-	NextOperation     string   `json:"next_operation"`
-	BlockedBy         []string `json:"blocked_by"`
+	OperationID        string   `json:"operation_id"`
+	ClaimID            string   `json:"claim_id"`
+	State              State    `json:"state"`
+	Stage              string   `json:"stage"`
+	Step               string   `json:"step"`
+	Reason             string   `json:"reason"`
+	UnknownClass       string   `json:"unknown_class,omitempty"`
+	NextOperation      string   `json:"next_operation"`
+	BlockedBy          []string `json:"blocked_by"`
 	AffectedOperations []string `json:"affected_operations"`
 }
 
@@ -186,20 +186,20 @@ type Authority struct {
 }
 
 type Plan struct {
-	Schema               string                   `json:"schema"`
-	CaseID               string                   `json:"case_id"`
-	GraphID              string                   `json:"graph_id"`
-	InputDigest          string                   `json:"input_digest"`
-	State                State                    `json:"state"`
-	DecisionReason       string                   `json:"decision_reason"`
-	ParallelBatches      [][]string               `json:"parallel_batches"`
-	SerialCuts           []SerialCut              `json:"serial_cuts"`
-	BlockedFrontiers     []Frontier               `json:"blocked_frontiers"`
-	RefutedFrontiers     []Frontier               `json:"refuted_frontiers"`
-	Unknowns             []UnknownDetail          `json:"unknowns"`
-	Evidence             []EvidenceResult         `json:"evidence"`
+	Schema                string                 `json:"schema"`
+	CaseID                string                 `json:"case_id"`
+	GraphID               string                 `json:"graph_id"`
+	InputDigest           string                 `json:"input_digest"`
+	State                 State                  `json:"state"`
+	DecisionReason        string                 `json:"decision_reason"`
+	ParallelBatches       [][]string             `json:"parallel_batches"`
+	SerialCuts            []SerialCut            `json:"serial_cuts"`
+	BlockedFrontiers      []Frontier             `json:"blocked_frontiers"`
+	RefutedFrontiers      []Frontier             `json:"refuted_frontiers"`
+	Unknowns              []UnknownDetail        `json:"unknowns"`
+	Evidence              []EvidenceResult       `json:"evidence"`
 	DenominatorMigrations []DenominatorMigration `json:"denominator_migrations"`
-	Dossier              string                   `json:"human_dossier"`
+	Dossier               string                 `json:"human_dossier"`
 }
 
 type ArtifactBinding struct {
@@ -208,32 +208,32 @@ type ArtifactBinding struct {
 }
 
 type Receipt struct {
-	Schema          string           `json:"schema"`
-	CaseID          string           `json:"case_id"`
-	InputDigest     string           `json:"input_digest"`
-	State           State            `json:"state"`
-	DecisionReason  string           `json:"decision_reason"`
-	Source          ArtifactBinding `json:"source"`
-	SemanticIR      ArtifactBinding `json:"semantic_ir"`
-	GeneratedGo     ArtifactBinding `json:"generated_go"`
-	Evaluator       ArtifactBinding `json:"evaluator"`
-	Contract        ArtifactBinding `json:"contract"`
-	Authority       Authority        `json:"product_authority"`
-	Counts          Counts           `json:"counts"`
-	DenominatorID   string           `json:"denominator_id"`
+	Schema           string          `json:"schema"`
+	CaseID           string          `json:"case_id"`
+	InputDigest      string          `json:"input_digest"`
+	State            State           `json:"state"`
+	DecisionReason   string          `json:"decision_reason"`
+	Source           ArtifactBinding `json:"source"`
+	SemanticIR       ArtifactBinding `json:"semantic_ir"`
+	GeneratedGo      ArtifactBinding `json:"generated_go"`
+	Evaluator        ArtifactBinding `json:"evaluator"`
+	Contract         ArtifactBinding `json:"contract"`
+	Authority        Authority       `json:"product_authority"`
+	Counts           Counts          `json:"counts"`
+	DenominatorID    string          `json:"denominator_id"`
 	FixedDenominator int             `json:"fixed_denominator"`
 }
 
 type Counts struct {
-	ParallelBatches  int `json:"parallel_batches"`
-	Schedulable      int `json:"schedulable"`
-	Blocked          int `json:"blocked"`
-	Refuted          int `json:"refuted"`
-	Unknown          int `json:"unknown"`
-	Executed         int `json:"executed"`
-	Reused           int `json:"reused"`
-	Skipped          int `json:"skipped"`
-	NotObserved      int `json:"not_observed"`
+	ParallelBatches int `json:"parallel_batches"`
+	Schedulable     int `json:"schedulable"`
+	Blocked         int `json:"blocked"`
+	Refuted         int `json:"refuted"`
+	Unknown         int `json:"unknown"`
+	Executed        int `json:"executed"`
+	Reused          int `json:"reused"`
+	Skipped         int `json:"skipped"`
+	NotObserved     int `json:"not_observed"`
 }
 
 type Evaluation struct {

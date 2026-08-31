@@ -4,7 +4,7 @@ set -Eeuo pipefail
 repo_root="$(pwd)"
 run_id="${GITHUB_RUN_ID:-local-$(date -u +%Y%m%dT%H%M%SZ)}"
 output_root="${CI_OUTPUT_ROOT:-${RUNNER_TEMP:-/tmp}/gooo-improvement-frontier-${run_id}}"
-mkdir -p "$output_root/logs" "$output_root/conformance-a" "$output_root/conformance-b" "$output_root/formatted"
+mkdir -p "$output_root/logs" "$output_root/conformance-a" "$output_root/conformance-b"
 attempts="$output_root/failed-attempts.ndjson"
 : > "$attempts"
 
@@ -36,30 +36,7 @@ ir_b="$output_root/semantic-ir-b.json"
 generated_go_b="$output_root/semantic.gooo-b.go"
 
 format_status=0
-format_log="$output_root/gofmt.diff"
-format_diff_status=0
-: > "$format_log"
-set +e
-format_tool_status=0
-while IFS= read -r -d '' source_file; do
-  formatted_file="$output_root/formatted/$source_file"
-  mkdir -p "$(dirname "$formatted_file")"
-  cp "$source_file" "$formatted_file"
-  gofmt -w "$formatted_file" || format_tool_status=$?
-  diff -u "$source_file" "$formatted_file" >> "$format_log"
-  diff_status=$?
-  if [ "$diff_status" -eq 2 ]; then
-    format_diff_status=2
-  elif [ "$diff_status" -eq 1 ] && [ "$format_diff_status" -eq 0 ]; then
-    format_diff_status=1
-  fi
-done < <(find . -type f -name '*.go' -not -path './.git/*' -print0)
-set -e
-if [ "$format_tool_status" -ne 0 ] || [ "$format_diff_status" -ne 0 ] || [ -s "$format_log" ]; then
-  format_status=1
-fi
-jq -cn --arg phase format --arg status "$([ "$format_status" -eq 0 ] && echo SUCCESS || echo FAILED_NON_BLOCKING)" --arg log "$format_log" --argjson exit_code "$format_status" '{phase:$phase,status:$status,exit_code:$exit_code,log:$log}' >> "$attempts"
-cat "$format_log"
+phase format bash -c 'find . -type f -name "*.go" -not -path "./.git/*" -print0 | xargs -0 -r gofmt -l | tee "$1"; test ! -s "$1"' _ "$output_root/gofmt.txt"
 phase build /usr/bin/time -f '%e %M' -o "$build_time" go build -o "$binary" ./cmd/gooo-improvement-frontier
 phase test /usr/bin/time -f '%e %M' -o "$test_time" go test -json -count=1 ./... > "$test_json"
 phase vet go vet ./...
@@ -72,6 +49,18 @@ phase deterministic-ir cmp "$ir_a" "$ir_b"
 phase deterministic-go cmp "$generated_go_a" "$generated_go_b"
 phase conformance-b "$binary" conformance --root "$repo_root" --source examples/improvement-frontier.gooo --contract contracts/improvement-frontier-denominator-v1.json --corpus examples/canonical-corpus.json --output-dir "$output_root/conformance-b"
 phase deterministic-plan diff -ru "$output_root/conformance-a" "$output_root/conformance-b"
+phase artifact-audit bash -c '
+  test "$(find "$1" -type f -name plan.json | wc -l | tr -d " ")" -eq 6
+  test -f "$1/conformance-index.json"
+  for case_dir in "$1"/*; do
+    test -d "$case_dir" || continue
+    test -f "$case_dir/plan.json"
+    test -f "$case_dir/receipt.json"
+    test -f "$case_dir/human-report.md"
+    jq -e ".product_authority.repository_writes == 0 and .product_authority.local_test_executions == 0 and .product_authority.cross_project_required_gates == 0" "$case_dir/receipt.json" >/dev/null
+  done
+' _ "$output_root/conformance-a"
+phase repository-audit bash -c 'test -z "$(git status --porcelain --untracked-files=all)"'
 
 read -r build_seconds build_rss < "$build_time"
 read -r test_seconds test_rss < "$test_time"
@@ -116,12 +105,6 @@ jq -n \
   --argjson valid_evidence "$valid_evidence" \
   --argjson operation_cases "$operation_cases" \
   --argjson format_status "$format_status" \
-  '{schema:$schema,ci_run_id:$run_id,ci_job_id:$job_id,build_wall_ms:$build_wall_ms,test_wall_ms:$test_wall_ms,peak_rss_kib:$peak_rss_kib,format_check:{status:(if $format_status == 0 then "SUCCESS" else "FAILED_NON_BLOCKING" end),exit_code:$format_status},tests:{discovered:$tests_discovered,executed:$tests_executed,reused:$tests_reused,skipped:$tests_skipped,not_observed:$tests_not_observed},operations:{executed:0,reused:$valid_evidence,skipped:0,not_observed:0,canonical_cases:$operation_cases},inventory:{directories:$directories,files:$files,physical_lines:$physical_lines,go_files:$go_files,go_lines:$go_lines,gooo_lines:$gooo_lines,root_readme_excluded:true},product_authority:{repository_writes:0,local_test_executions:0,cross_project_required_gates:0},development_actions:["checkout","format_check","build","test","vet","compile","conformance","determinism_check"]}' > "$output_root/runtime-receipt.json"
-
-if [ -n "$(git status --porcelain --untracked-files=all)" ]; then
-  git status --porcelain --untracked-files=all >&2
-  echo 'repository changed during CI conformance' >&2
-  exit 1
-fi
+  '{schema:$schema,ci_run_id:$run_id,ci_job_id:$job_id,build_wall_ms:$build_wall_ms,test_wall_ms:$test_wall_ms,peak_rss_kib:$peak_rss_kib,format_check:{status:(if $format_status == 0 then "SUCCESS" else "FAILED" end),exit_code:$format_status},tests:{discovered:$tests_discovered,executed:$tests_executed,reused:$tests_reused,skipped:$tests_skipped,not_observed:$tests_not_observed},operations:{executed:0,reused:$valid_evidence,skipped:0,not_observed:0,canonical_cases:$operation_cases},inventory:{directories:$directories,files:$files,physical_lines:$physical_lines,go_files:$go_files,go_lines:$go_lines,gooo_lines:$gooo_lines,root_readme_excluded:true},product_authority:{repository_writes:0,local_test_executions:0,cross_project_required_gates:0},development_actions:["checkout","format_check","build","test","vet","compile","conformance","determinism_check","artifact_audit","repository_audit"]}' > "$output_root/runtime-receipt.json"
 
 printf 'CI_OUTPUT_ROOT=%s\n' "$output_root"

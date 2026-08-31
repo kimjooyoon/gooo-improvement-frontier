@@ -102,4 +102,3 @@ func renderDossier(plan Plan, fixture Fixture) string {
 	}
 	return builder.String()
 }
-

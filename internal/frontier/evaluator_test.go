@@ -109,4 +109,3 @@ func TestMismatchedCacheIdentityCannotCloseNode(t *testing.T) {
 		t.Fatalf("mismatched cache evidence was accepted: %+v", evaluation.Plan)
 	}
 }
-

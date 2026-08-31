@@ -238,21 +238,21 @@ func compileMeta(sourcePath, contractPath string) (compiledMeta, error) {
 }
 
 type conformanceIndex struct {
-	Schema           string             `json:"schema"`
-	CorpusID         string             `json:"corpus_id"`
-	DenominatorID    string             `json:"denominator_id"`
-	FixedDenominator int                `json:"fixed_denominator"`
+	Schema           string            `json:"schema"`
+	CorpusID         string            `json:"corpus_id"`
+	DenominatorID    string            `json:"denominator_id"`
+	FixedDenominator int               `json:"fixed_denominator"`
 	Cases            []conformanceCase `json:"cases"`
-	States           map[string]int     `json:"states"`
+	States           map[string]int    `json:"states"`
 }
 
 type conformanceCase struct {
-	Ordinal           int    `json:"ordinal"`
-	CaseID            string `json:"case_id"`
-	State             frontier.State `json:"state"`
-	ParallelBatches   int    `json:"parallel_batches"`
-	BlockedFrontiers  int    `json:"blocked_frontiers"`
-	RefutedFrontiers  int    `json:"refuted_frontiers"`
+	Ordinal          int            `json:"ordinal"`
+	CaseID           string         `json:"case_id"`
+	State            frontier.State `json:"state"`
+	ParallelBatches  int            `json:"parallel_batches"`
+	BlockedFrontiers int            `json:"blocked_frontiers"`
+	RefutedFrontiers int            `json:"refuted_frontiers"`
 }
 
 func assertExpectations(fixture frontier.Fixture, evaluation frontier.Evaluation) error {

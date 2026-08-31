@@ -21,4 +21,3 @@ func ValidateDigest(value string) error {
 	}
 	return nil
 }
-

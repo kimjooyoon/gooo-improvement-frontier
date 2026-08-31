@@ -116,7 +116,7 @@ func EvaluateFixture(fixture Fixture, inputDigest string, source, semanticIR, ge
 		Schema: ReceiptSchema, CaseID: fixture.CaseID, InputDigest: inputDigest, State: plan.State, DecisionReason: plan.DecisionReason,
 		Source: source, SemanticIR: semanticIR, GeneratedGo: generatedGo, Evaluator: evaluator, Contract: contract,
 		Authority: Authority{RepositoryWrites: 0, LocalTestExecutions: 0, CrossProjectRequiredGates: 0},
-		Counts: counts, DenominatorID: fixture.Graph.DenominatorID, FixedDenominator: fixture.Graph.MetaActivityCount,
+		Counts:    counts, DenominatorID: fixture.Graph.DenominatorID, FixedDenominator: fixture.Graph.MetaActivityCount,
 	}
 	return Evaluation{Plan: plan, Receipt: receipt}, nil
 }
