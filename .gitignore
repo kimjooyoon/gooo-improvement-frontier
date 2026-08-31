@@ -1,0 +1,6 @@
+.DS_Store
+
+# CI writes all generated receipts and reports to caller-owned temporary paths.
+.gooo-out/
+.ci-out/
+
