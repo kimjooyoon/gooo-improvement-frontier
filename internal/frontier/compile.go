@@ -116,7 +116,7 @@ func GenerateGo(ir SemanticIR, semanticDigest string) []byte {
 	fmt.Fprintf(&builder, "const ContractPath = %q\n", "contracts/improvement-frontier-denominator-v1.json")
 	fmt.Fprintf(&builder, "const ContractDigest = %q\n", ir.ContractDigest)
 	fmt.Fprintf(&builder, "const MetaActivityCount = %d\n\n", ir.MetaActivityCount)
-	builder.WriteString("type Activity struct {\n\tClaimID string\n\tOperationID string\n\tStage string\n\tStep string\n\tProofChoice string\n}\n\n")
+	builder.WriteString("type Activity struct {\n\tClaimID     string\n\tOperationID string\n\tStage       string\n\tStep        string\n\tProofChoice string\n}\n\n")
 	builder.WriteString("var Activities = []Activity{\n")
 	for _, activity := range ir.Activities {
 		fmt.Fprintf(&builder, "\t{ClaimID: %q, OperationID: %q, Stage: %q, Step: %q, ProofChoice: %q},\n", activity.ClaimID, activity.OperationID, activity.Stage, activity.Step, activity.ProofChoice)
@@ -173,4 +173,3 @@ func parseAttributes(input string) (map[string]string, error) {
 func validProofChoice(choice ProofChoice) bool {
 	return choice == ProofFoundation || choice == ProofCoherence || choice == ProofRegression
 }
-

@@ -4,7 +4,7 @@ set -Eeuo pipefail
 repo_root="$(pwd)"
 run_id="${GITHUB_RUN_ID:-local-$(date -u +%Y%m%dT%H%M%SZ)}"
 output_root="${CI_OUTPUT_ROOT:-${RUNNER_TEMP:-/tmp}/gooo-improvement-frontier-${run_id}}"
-mkdir -p "$output_root/logs" "$output_root/conformance-a" "$output_root/conformance-b"
+mkdir -p "$output_root/logs" "$output_root/conformance-a" "$output_root/conformance-b" "$output_root/formatted"
 attempts="$output_root/failed-attempts.ndjson"
 : > "$attempts"
 
@@ -37,11 +37,25 @@ generated_go_b="$output_root/semantic.gooo-b.go"
 
 format_status=0
 format_log="$output_root/gofmt.diff"
+format_diff_status=0
+: > "$format_log"
 set +e
-find . -type f -name '*.go' -not -path './.git/*' -print0 | xargs -0 -r gofmt -d > "$format_log" 2>&1
-format_tool_status=$?
+format_tool_status=0
+while IFS= read -r -d '' source_file; do
+  formatted_file="$output_root/formatted/$source_file"
+  mkdir -p "$(dirname "$formatted_file")"
+  cp "$source_file" "$formatted_file"
+  gofmt -w "$formatted_file" || format_tool_status=$?
+  diff -u "$source_file" "$formatted_file" >> "$format_log"
+  diff_status=$?
+  if [ "$diff_status" -eq 2 ]; then
+    format_diff_status=2
+  elif [ "$diff_status" -eq 1 ] && [ "$format_diff_status" -eq 0 ]; then
+    format_diff_status=1
+  fi
+done < <(find . -type f -name '*.go' -not -path './.git/*' -print0)
 set -e
-if [ "$format_tool_status" -ne 0 ] || [ -s "$format_log" ]; then
+if [ "$format_tool_status" -ne 0 ] || [ "$format_diff_status" -ne 0 ] || [ -s "$format_log" ]; then
   format_status=1
 fi
 jq -cn --arg phase format --arg status "$([ "$format_status" -eq 0 ] && echo SUCCESS || echo FAILED_NON_BLOCKING)" --arg log "$format_log" --argjson exit_code "$format_status" '{phase:$phase,status:$status,exit_code:$exit_code,log:$log}' >> "$attempts"

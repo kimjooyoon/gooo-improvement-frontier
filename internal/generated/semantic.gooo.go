@@ -12,10 +12,10 @@ const ContractDigest = "sha256:7834f9f56598aead432e2f439837526de6cf5c9f0a53662a8
 const MetaActivityCount = 12
 
 type Activity struct {
-	ClaimID string
+	ClaimID     string
 	OperationID string
-	Stage string
-	Step string
+	Stage       string
+	Step        string
 	ProofChoice string
 }
 

@@ -307,8 +307,18 @@ func makeBlockedFrontiers(graph Graph, byID map[string]Node, ids []string, closu
 		reason := node.Reason
 		unknownClass := node.UnknownClass
 		if reason == "" {
-			reason = "Causal cycle requires an explicit Münchhausen proof choice before scheduling."
-			unknownClass = "CYCLE_REQUIRES_PROOF_CHOICE"
+			if nodeHasInvalidEvidence(node, evidence) {
+				for _, item := range evidence {
+					if !item.Valid && contains(node.EvidenceIDs, item.EvidenceID) {
+						reason = item.Reason
+						unknownClass = "IMMUTABLE_IDENTITY_MISMATCH"
+						break
+					}
+				}
+			} else {
+				reason = "Causal cycle requires an explicit Münchhausen proof choice before scheduling."
+				unknownClass = "CYCLE_REQUIRES_PROOF_CHOICE"
+			}
 		}
 		frontier = append(frontier, Frontier{OperationID: operationID, ClaimID: node.ClaimID, State: StateUnknown, Stage: node.Stage, Step: node.Step, Reason: reason, UnknownClass: unknownClass, NextOperation: node.NextOperation, BlockedBy: sortedStrings(node.BlockedBy), AffectedOperations: affected})
 	}
